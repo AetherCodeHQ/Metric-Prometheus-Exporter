@@ -6,7 +6,7 @@ Thank you for your interest in contributing! 🎉
 
 ### 1. Fork the Repository
 ```bash
-git clone https://github.com/Qyroxen/Metric-Prometheus-Exporter.git
+git clone https://github.com/AetherCodeHQ/Metric-Prometheus-Exporter.git
 cd Metric-Prometheus-Exporter
 ```
 
