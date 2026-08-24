@@ -1,26 +1,37 @@
+
 package main
 
 import (
 	"fmt"
+	"net"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
-// metric_prometheus_exporter - Export metrics to Prometheus
-func metric_prometheus_exporter(path string) {
-	fmt.Println("========================================")
-	fmt.Println("  Metric-Prometheus-Exporter")
-	fmt.Println("  Export metrics to Prometheus")
-	fmt.Println("========================================")
-	fmt.Println()
-	fmt.Println("Target:", path)
-	fmt.Println("Processing...")
-	fmt.Println("Done!")
-}
-
 func main() {
-	path := "."
+	host := "127.0.0.1"
+	ports := []int{22, 80, 443, 8080}
 	if len(os.Args) > 1 {
-		path = os.Args[1]
+		host = os.Args[1]
 	}
-	metric_prometheus_exporter(path)
+	if len(os.Args) > 2 {
+		ports = ports[:0]
+		for _, q := range strings.Split(os.Args[2], ",") {
+			if n, err := strconv.Atoi(q); err == nil {
+				ports = append(ports, n)
+			}
+		}
+	}
+	for _, p := range ports {
+		addr := fmt.Sprintf("%s:%d", host, p)
+		c, err := net.DialTimeout("tcp", addr, 2*time.Second)
+		if err != nil {
+			fmt.Printf("%-24s closed\n", addr)
+			continue
+		}
+		fmt.Printf("%-24s open\n", addr)
+		c.Close()
+	}
 }
